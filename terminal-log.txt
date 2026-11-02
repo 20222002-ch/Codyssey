@@ -1,0 +1,144 @@
+﻿**********************
+Windows PowerShell 기록 시작
+시작 시간: 20261102182803
+사용자 이름: 4F-71\User
+RunAs 사용자: 4F-71\User
+구성 이름: 
+Machine: 4F-71 (Microsoft Windows NT 10.0.26300.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 14888
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 .\terminal-log.txt입니다.
+PS C:\Users\User\Documents\codyssey-practice> pwd
+
+Path
+----
+C:\Users\User\Documents\codyssey-practice
+
+
+PS C:\Users\User\Documents\codyssey-practice> ls -Force
+
+
+    디렉터리: C:\Users\User\Documents\codyssey-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-11-02   오후 6:24             34 memo.txt
+-a----      2026-11-02   오후 6:28              0 terminal-log.txt
+
+
+PS C:\Users\User\Documents\codyssey-practice> cat memo.txt
+Hello Codyssey
+PS C:\Users\User\Documents\codyssey-practice> Stop-Transcript
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20261102182822
+**********************
+**********************
+Windows PowerShell 기록 시작
+시작 시간: 20261102182941
+사용자 이름: 4F-71\User
+RunAs 사용자: 4F-71\User
+구성 이름: 
+Machine: 4F-71 (Microsoft Windows NT 10.0.26300.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 14888
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 .\terminal-log.txt입니다.
+PS C:\Users\User\Documents\codyssey-practice> mkdir practice2
+
+
+    디렉터리: C:\Users\User\Documents\codyssey-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----      2026-11-02   오후 6:29                practice2
+
+
+PS C:\Users\User\Documents\codyssey-practice> ni .\practice2\note.txt
+
+
+    디렉터리: C:\Users\User\Documents\codyssey-practice\practice2
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-11-02   오후 6:29              0 note.txt
+
+
+PS C:\Users\User\Documents\codyssey-practice> echo "CLI practice" > .\practice2\note.txt
+>> 매개 변수 바인딩(Out-File): 이름="InputObject"; 값="CLI practice"
+PS C:\Users\User\Documents\codyssey-practice> cat .\practice2\note.txt
+CLI practice
+PS C:\Users\User\Documents\codyssey-practice> cp .\practice2\note.txt .\practice2\copy.txt
+PS C:\Users\User\Documents\codyssey-practice> mv .\practice2\copy.txt .\practice2\backup.txt
+PS C:\Users\User\Documents\codyssey-practice> mv .\practice2\backup.txt .
+PS C:\Users\User\Documents\codyssey-practice> cat .\backup.txt
+CLI practice
+PS C:\Users\User\Documents\codyssey-practice> ls .\practice2
+
+
+    디렉터리: C:\Users\User\Documents\codyssey-practice\practice2
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-11-02   오후 6:29             30 note.txt
+
+
+PS C:\Users\User\Documents\codyssey-practice> cd .\practice2
+PS C:\Users\User\Documents\codyssey-practice\practice2> pwd
+
+Path
+----
+C:\Users\User\Documents\codyssey-practice\practice2
+
+
+PS C:\Users\User\Documents\codyssey-practice\practice2> cd ..
+PS C:\Users\User\Documents\codyssey-practice> cd C:\Users\User\Documents\codyssey-practice\practice2
+PS C:\Users\User\Documents\codyssey-practice\practice2> pwd
+
+Path
+----
+C:\Users\User\Documents\codyssey-practice\practice2
+
+
+PS C:\Users\User\Documents\codyssey-practice\practice2> cd ..
+PS C:\Users\User\Documents\codyssey-practice> rm .\practice2\note.txt
+PS C:\Users\User\Documents\codyssey-practice> rm .\practice2
+PS C:\Users\User\Documents\codyssey-practice> rm .\backup.txt
+PS C:\Users\User\Documents\codyssey-practice> ls
+
+
+    디렉터리: C:\Users\User\Documents\codyssey-practice
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----      2026-11-02   오후 6:24             34 memo.txt
+-a----      2026-11-02   오후 6:28           1430 terminal-log.txt
+
+
+PS C:\Users\User\Documents\codyssey-practice> Stop-Transcript
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20261102183127
+**********************
