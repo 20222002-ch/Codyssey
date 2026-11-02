@@ -58,18 +58,14 @@ Linux 권한 실습은 개인 노트북에서 진행할 예정이다.
 
 | 작업 | 사용한 명령 | 확인한 결과 |
 |---|---|---|
-| 현재 위치 확인 | — | — |
-| 숨김 파일을 포함한 목록 확인 | — | — |
-| 절대 경로 / 상대 경로로 이동 | — | — |
-| 폴더 생성 | — | — |
-| 빈 파일 생성 및 파일 내용 확인 | — | — |
-| 복사 | — | — |
-| 이동 및 이름 변경 | — | — |
-| 연습용 파일·폴더 삭제 | — | — |
-
-```text
-실습 후 명령과 실제 출력을 추가할 자리
-```
+| 현재 위치 확인 | `pwd` | 현재 작업 폴더의 전체 경로 확인 |
+| 숨김 파일을 포함한 목록 확인 | `ls -Force` | 폴더 내 항목 확인. 최초 빈 폴더에서는 출력 없음 |
+| 절대 경로 / 상대 경로로 이동 | `cd C:\Users\User\Documents\codyssey-practice\practice2`, `cd .\practice2`, `cd ..` | 이동 후 `pwd`로 위치 확인 |
+| 폴더 생성 | `mkdir practice2` | practice2 폴더 생성 |
+| 빈 파일 생성 및 파일 내용 확인 | `ni .\practice2\note.txt`, `echo "CLI practice" > .\practice2\note.txt`, `cat .\practice2\note.txt` | 빈 파일 생성 후 내용을 저장하고 CLI practice 출력 확인 |
+| 복사 | `cp .\practice2\note.txt .\practice2\copy.txt` | 원본을 유지한 채 복사본 생성 |
+| 이동 및 이름 변경 | `mv .\practice2\copy.txt .\practice2\backup.txt`, `mv .\practice2\backup.txt .` | 이름 변경 후 상위 폴더로 이동. 내용 유지 확인 |
+| 연습용 파일·폴더 삭제 | `rm .\practice2\note.txt`, `rm .\practice2`, `rm .\backup.txt` | 삭제 후 memo.txt와 terminal-log.txt만 남은 것 확인 |
 
 **경로 정리**
 
