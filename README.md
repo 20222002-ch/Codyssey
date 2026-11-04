@@ -603,7 +603,7 @@ docker volume rm codyssey-repro-data
 - [x] Compose up·down·ps·logs
 - [x] 환경 변수로 실제 NGINX 수신 포트 변경
 - [x] GitHub 인증용 SSH 공개키 등록 및 서버의 키 수락 확인
-- [ ] SSH 인증·푸시 성공 출력 추가 및 보너스 변경분 원격 반영
+- [x] SSH 인증·푸시 성공 출력 추가 및 보너스 변경분 원격 반영
 
 ### 선택 1. Compose 단일 서비스
 
@@ -696,7 +696,7 @@ git remote -v
 git push origin main
 ```
 
-하지만 [실제 SSH 푸시 로그](./logs/github-ssh.txt)에는 아래 오류가 남았다.
+초기 [SSH 푸시 실패 로그](./logs/github-ssh.txt)에는 아래 오류가 남았다. 이후 공개키 등록과 암호 입력을 마쳐 아래 성공 로그로 해결을 확인했다.
 
 ```text
 git@github.com: Permission denied (publickey).
@@ -707,7 +707,19 @@ fatal: Could not read from remote repository.
 
 등록한 공개키의 지문은 `SHA256:rEwugJZVSivG9c6SqaWPp2bQcRok9cRwBB1xydfIbd8`이다. 공개키 원문·개인키·키 암호는 문서에 넣지 않았다.
 
-키 암호를 입력할 수 없는 자동 실행 환경에서는 BatchMode 인증이 실패했고 SSH agent도 연결되지 않았다. 따라서 이를 키 등록 실패와 구분한다. 사용자는 대화형 PowerShell에서 인증·푸시를 마쳤다고 확인했으나, 새 성공 출력이 원본 로그에 남아 있지 않아 성공 증거와 보너스 변경분의 최종 SSH 푸시는 추가 확인 항목으로 남겼다. [키 등록·서버 수락 확인](./logs/ssh-registration-check.txt)
+키 암호를 입력할 수 없는 자동 실행 환경에서는 BatchMode 인증이 실패했고 SSH agent도 연결되지 않았다. 따라서 이를 키 등록 실패와 구분한다. 이후 사용자 PowerShell에서 키 암호를 입력해 보너스 결과물 커밋 f7c5625를 SSH로 푸시했고, 원격 main의 같은 커밋을 확인했다. [키 등록·서버 수락 확인](./logs/ssh-registration-check.txt), [최종 SSH 푸시 성공 원본 로그](./logs/github-ssh-success.txt)
+
+실제 성공 출력 발췌:
+
+```text
+PS> git push origin main
+Enter passphrase for key 'C:/Users/user/.ssh/id_ed25519_codyssey':
+Writing objects: 100% (18/18), 35.20 KiB | 3.20 MiB/s, done.
+To github.com:20222002-ch/Codyssey.git
+   d091ff1..f7c5625  main -> main
+```
+
+위 로그에는 암호 질문만 있고 입력한 암호는 포함되지 않는다. SSH 성공 증거 파일과 이 문서의 완료 표시는 후속 문서 커밋으로 저장한다.
 
 최종 커밋을 SSH로 반영하고 기록하는 명령은 다음과 같다. 키 암호를 물으면 사용자 터미널에서 입력하며 로그에 암호를 직접 적지 않는다.
 
@@ -722,7 +734,7 @@ SSH 테스트는 본인 계정과 successfully authenticated 메시지가 표시
 
 또한 SSH 주소를 명령으로 단독 입력해 PowerShell CommandNotFoundException이 발생했다. 주소는 git remote set-url의 인자이며 실행 명령과 구분한다.
 
-PowerShell 원본 보너스 로그 일부에는 터미널의 NUL 제어 문자가 포함되어 있다. 원본을 보존했으며 README에는 읽을 수 있는 명령·결과를 요약했다.
+PowerShell 보너스 로그 일부의 NUL 제어 문자와 줄 끝 공백은 가독성을 위해 제거했다. 명령·출력 내용은 보존했고 README에는 핵심 결과를 요약했다.
 
 ## 제출 전 남은 확인
 
@@ -734,4 +746,4 @@ PowerShell 원본 보너스 로그 일부에는 터미널의 NUL 제어 문자�
 - [x] 첨부 이미지 확인 및 로그의 토큰·비밀번호·개인키·인증 코드 점검
 - [x] 파일 커밋·푸시 및 상대 경로 링크 대상 파일의 원격 트리 포함 확인
 
-필수 실습 증거와 기술 문서는 기존 커밋으로 원격에 반영했다. 선택 과제 1~4번 및 SSH 공개키 등록까지 확인했고, SSH 성공 출력 보관과 보너스 변경분의 최종 원격 반영을 남겨두었다.
+필수 항목과 선택 과제 1~5번을 수행하고 증거를 정리했다. 보너스 결과물의 SSH 푸시도 성공 로그와 원격 커밋으로 확인했다.

@@ -1,0 +1,35 @@
+**********************
+Windows PowerShell 기록 시작
+시작 시간: 20261104141411
+사용자 이름: DESKTOP-LCCS8QI\user
+RunAs 사용자: DESKTOP-LCCS8QI\user
+구성 이름:
+Machine: DESKTOP-LCCS8QI (Microsoft Windows NT 10.0.26200.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 33884
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 .\logs\github-ssh-success.txt입니다.
+PS C:\Users\user\codyssey-web\Codyssey> git push origin main
+Enter passphrase for key 'C:/Users/user/.ssh/id_ed25519_codyssey':
+Enumerating objects: 22, done.
+Counting objects: 100% (22/22), done.
+Delta compression using up to 16 threads
+Compressing objects: 100% (17/17), done.
+Writing objects: 100% (18/18), 35.20 KiB | 3.20 MiB/s, done.
+Total 18 (delta 7), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (7/7), completed with 3 local objects.
+To github.com:20222002-ch/Codyssey.git
+   d091ff1..f7c5625  main -> main
+PS C:\Users\user\codyssey-web\Codyssey> Stop-Transcript
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20261104141431
+**********************
