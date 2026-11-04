@@ -1,0 +1,109 @@
+**********************
+Windows PowerShell 기록 시작
+시작 시간: 20261104135624
+사용자 이름: DESKTOP-LCCS8QI\user
+RunAs 사용자: DESKTOP-LCCS8QI\user
+구성 이름:
+Machine: DESKTOP-LCCS8QI (Microsoft Windows NT 10.0.26200.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 33884
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 .\logs\compose-multi.txt입니다.
+PS C:\Users\user\codyssey-web\Codyssey> @'
+services:
+  web:
+    build: .
+    ports:
+      - "127.0.0.1:8085:80"
+
+  checker:
+    image: alpine:latest
+    command: ["sleep", "infinity"]
+'@ | Set-Content -Encoding utf8 .\docker-compose.yml
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus config
+name: codyssey-bonus
+services:
+  checker:
+    command:
+      - sleep
+      - infinity
+    image: alpine:latest
+    networks:
+      default: null
+  web:
+    networks:
+      default: null
+    build:
+      context: C:\Users\user\codyssey-web\Codyssey
+      dockerfile: Dockerfile
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 80
+        published: "8085"
+        protocol: tcp
+networks:
+  default:
+    name: codyssey-bonus_default
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus up -d --build
+[+] up 4/4
+ ✔ Image alpine:latest Pulled                                                                                       3.0s
+[+] Building 1.4s (9/9) FINISHED
+ => [internal] load local bake definitions                                                                         0.0s
+ => => reading from stdin 533B                                                                                     0.0s
+ => [internal] load build definition from Dockerfile                                                               0.0s
+ => => transferring dockerfile: 152B                                                                               0.0s
+ => [internal] load metadata for docker.io/library/nginx:alpine                                                    0.8s
+ => [internal] load .dockerignore                                                                                  0.0s
+ => => transferring context: 2B                                                                                    0.0s
+ => [internal] load build context                                                                                  0.0s
+ => => transferring context: 61B                                                                                   0.0s
+ => [1/2] FROM docker.io/library/nginx:alpine@sha256:785835ea65db4bba6f021acc0f3be91b0fef76a53fe41f8588c6698d2aed  0.0s
+ => => resolve docker.io/library/nginx:alpine@sha256:785835ea65db4bba6f021acc0f3be91b0fef76a53fe41f8588c6698d2aed  0.0s
+ => CACHED [2/2] COPY site/ /usr/share/nginx/html/                                                                 0.0s
+ => exporting to image                                                                                             0.1s
+ => => exporting layers                                                                                            0.0s
+ => => exporting manifest sha256:8a96820b2d450102178b2227ca183e6d9037d13d6bd6a8cd3165c4df55f8014f                  0.0s
+ => => exporting config sha256:db2c82c158b8d13329a146de60b4e45a854a63dc64e6415c9a2291aeccec4964                    0.0s
+ => => exporting attestation manifest sha256:3dcc8ca210f2abac7e61a53d8a238ce993249e49e5501c939cfa38c0e55dc748      0.0s
+ => => exporting manifest list sha256:a6e950ca29c63d3cc80683d48d88f03390e2123af80753940ec859e365966daa             0.0s
+ => => naming to docker.io/library/codyssey-bonus-web:latest                                                       0.0s
+ => => unpacking to docker.io/library/codyssey-bonus-web:latest                                                    0.0s
+ => resolving provenance for metadata file                                                                         0.0s
+[+] up 7/7
+ ✔ Image alpine:latest                Pulled                                                                        3.0s
+ ✔ Image codyssey-bonus-web           Built                                                                         1.6s
+ ✔ Container codyssey-bonus-web-1     Running                                                                       0.0s
+ ✔ Container codyssey-bonus-checker-1 Started                                                                       0.3s
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus ps
+NAME                       IMAGE                                                                     COMMAND
+       SERVICE   CREATED              STATUS              PORTS
+codyssey-bonus-checker-1   alpine:latest                                                             "sleep infinity"
+       checker   2 seconds ago        Up 1 second
+codyssey-bonus-web-1       sha256:d086f91645c4066e2eeda689ba2c2db0c3df97867f7b16be96e3139b9ec01597   "/docker-entrypoint
+.…"   web       About a minute ago   Up About a minute   127.0.0.1:8085->80/tcp
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus exec checker wget -qO- http://web:80
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 변경 반영 성공!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+PS C:\Users\user\codyssey-web\Codyssey> Stop-Transcript
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20261104135656
+**********************

@@ -1,0 +1,28 @@
+2026-11-04: 실습 로그에서 8088/9090 응답 성공 및 down 실행을 확인. 브라우저 접속용으로 9090 설정을 다시 실행.
+PS> $env:NGINX_PORT = "9090"
+PS> docker compose -p codyssey-env -f docker-compose.env.yml up -d
+ Network codyssey-env_default Creating
+ Network codyssey-env_default Creating
+ Network codyssey-env_default Created
+ Network codyssey-env_default Created
+ Container codyssey-env-web-1 Creating
+ Container codyssey-env-web-1 Created
+ Container codyssey-env-web-1 Starting
+ Container codyssey-env-web-1 Started
+
+PS> docker compose -p codyssey-env -f docker-compose.env.yml ps
+NAME                 IMAGE              COMMAND                  SERVICE   CREATED         STATUS        PORTS
+codyssey-env-web-1   codyssey-env-web   "/docker-entrypoint.…"   web       2 seconds ago   Up 1 second   127.0.0.1:8086->9090/tcp
+
+PS> curl.exe --fail --silent --show-error http://localhost:8086
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 변경 반영 성공!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>

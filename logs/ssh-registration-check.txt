@@ -1,0 +1,15 @@
+2026-11-04 (Asia/Seoul): README 보완 시 등록 상태를 재확인.
+
+확인: https://github.com/20222002-ch.keys 의 인증용 공개키와 로컬 .pub 비교
+Matching GitHub authentication key: True
+
+PS> ssh -v -T -o BatchMode=yes -o ConnectTimeout=10 -i C:/Users/user/.ssh/id_ed25519_codyssey -o IdentitiesOnly=yes git@github.com
+관련 출력 발췌:
+debug1: get_agent_identities: ssh_get_authentication_socket: No such file or directory
+debug1: Offering public key: C:/Users/user/.ssh/id_ed25519_codyssey ED25519 SHA256:rEwugJZVSivG9c6SqaWPp2bQcRok9cRwBB1xydfIbd8 explicit
+debug1: Server accepts key: C:/Users/user/.ssh/id_ed25519_codyssey ED25519 SHA256:rEwugJZVSivG9c6SqaWPp2bQcRok9cRwBB1xydfIbd8 explicit
+debug1: No more authentication methods to try.
+git@github.com: Permission denied (publickey).
+
+판독: 키 등록·서버 수락은 확인. BatchMode에서는 키 암호를 입력할 수 없어 서명 인증을 완료하지 못함.
+대화형 PowerShell에서 키 암호를 입력해 인증·푸시하고 성공 출력을 추가해야 함.

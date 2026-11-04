@@ -1,0 +1,62 @@
+**********************
+Windows PowerShell 기록 시작
+시작 시간: 20261104140409
+사용자 이름: DESKTOP-LCCS8QI\user
+RunAs 사용자: DESKTOP-LCCS8QI\user
+구성 이름:
+Machine: DESKTOP-LCCS8QI (Microsoft Windows NT 10.0.26200.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 33884
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 .\logs\github-ssh.txt입니다.
+PS C:\Users\user\codyssey-web\Codyssey> git config --local core.sshCommand "ssh -i C:/Users/user/.ssh/id_ed25519_codyssey -o IdentitiesOnly=yes"
+
+PS C:\Users\user\codyssey-web\Codyssey> git remote set-url origin git@github.com:20222002-ch/Codyssey.git
+
+PS C:\Users\user\codyssey-web\Codyssey> git remote -v
+origin  git@github.com:20222002-ch/Codyssey.git (fetch)
+origin  git@github.com:20222002-ch/Codyssey.git (push)
+PS C:\Users\user\codyssey-web\Codyssey> git@github.com:20222002-ch/Codyssey.git
+git@github.com:20222002-ch/Codyssey.git : 'git@github.com:20222002-ch/Codyssey.git' 용어가 cmdlet, 함수, 스크립트 파일 또는 실행할 수 있는
+프로그램 이름으로 인식되지 않습니다. 이름이 정확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검증한 다음 다시 시도하십시오.
+위치 줄:1 문자:1
++ git@github.com:20222002-ch/Codyssey.git
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (git@github.com:20222002-ch/Codyssey.git:String) [], CommandNotFoundExcept
+ion
+    + FullyQualifiedErrorId : CommandNotFoundException
+git@github.com:20222002-ch/Codyssey.git : 'git@github.com:20222002-ch/Codyssey.git' 용어가 cmdlet, 함수, 스크립트 파일
+또는 실행할 수 있는 프로그램 이름으로 인식되지 않습니다. 이름이 정확한지 확인하고 경로가 포함된 경우 경로가 올바른지 검
+증한 다음 다시 시도하십시오.
+위치 줄:1 문자:1
++ git@github.com:20222002-ch/Codyssey.git
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (git@github.com:20222002-ch/Codyssey.git:String) [], CommandNotFoundExce
+   ption
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+PS C:\Users\user\codyssey-web\Codyssey> cd C:\Users\user\codyssey-web\Codyssey
+PS C:\Users\user\codyssey-web\Codyssey> git remote set-url origin git@github.com:20222002-ch/Codyssey.git
+
+PS C:\Users\user\codyssey-web\Codyssey> git remote -v
+origin  git@github.com:20222002-ch/Codyssey.git (fetch)
+origin  git@github.com:20222002-ch/Codyssey.git (push)
+PS C:\Users\user\codyssey-web\Codyssey> git push origin main
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+PS C:\Users\user\codyssey-web\Codyssey> Stop-Transcript
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20261104140548
+**********************

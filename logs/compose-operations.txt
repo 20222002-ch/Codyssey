@@ -1,0 +1,113 @@
+**********************
+Windows PowerShell 기록 시작
+시작 시간: 20261104135710
+사용자 이름: DESKTOP-LCCS8QI\user
+RunAs 사용자: DESKTOP-LCCS8QI\user
+구성 이름:
+Machine: DESKTOP-LCCS8QI (Microsoft Windows NT 10.0.26200.0)
+호스트 응용 프로그램: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+프로세스 ID: 33884
+PSVersion: 5.1.26100.9711
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9711
+BuildVersion: 10.0.26100.9711
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+기록이 시작되었습니다. 출력 파일은 .\logs\compose-operations.txt입니다.
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus ps
+NAME                       IMAGE                                                                     COMMAND
+       SERVICE   CREATED          STATUS          PORTS
+codyssey-bonus-checker-1   alpine:latest                                                             "sleep infinity"
+       checker   29 seconds ago   Up 28 seconds
+codyssey-bonus-web-1       sha256:d086f91645c4066e2eeda689ba2c2db0c3df97867f7b16be96e3139b9ec01597   "/docker-entrypoint
+.…"   web       2 minutes ago    Up 2 minutes    127.0.0.1:8085->80/tcp
+PS C:\Users\user\codyssey-web\Codyssey> curl.exe http://localhost:8085
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 변경 반영 성공!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus logs --tail 30 web
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: nginx/1.31.8
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: built by gcc 15.2.0 (Alpine 15.2.0)
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: OS: Linux 6.18.54.1-microsoft-standard-WSL2
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: getrlimit(RLIMIT_NOFILE): 1048576:1048576
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker processes
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 30
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 31
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 32
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 33
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 34
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 35
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 36
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 37
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 38
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 39
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 40
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 41
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 42
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 43
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 44
+web-1  | 2026/11/04 04:55:05 [notice] 1#1: start worker process 45
+web-1  | 172.18.0.1 - - [04/Nov/2026:04:55:13 +0000] "GET / HTTP/1.1" 200 243 "-" "curl/8.21.0" "-"
+web-1  | 172.18.0.1 - - [04/Nov/2026:04:55:21 +0000] "GET / HTTP/1.1" 200 243 "-" "Mozilla/5.0 (Windows NT 10.0; Win64;
+x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+web-1  | 2026/11/04 04:55:22 [error] 32#32: *2 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or dir
+ectory), client: 172.18.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8085", referrer:
+"http://localhost:8085/"
+web-1  | 172.18.0.1 - - [04/Nov/2026:04:55:22 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://localhost:8085/" "Mozil
+la/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+web-1  | 172.18.0.1 - - [04/Nov/2026:04:55:29 +0000] "GET / HTTP/1.1" 200 243 "-" "Mozilla/5.0 (Windows NT 10.0; Win64;
+x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+web-1  | 2026/11/04 04:55:29 [error] 31#31: *3 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or dir
+ectory), client: 172.18.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8085", referrer:
+"http://localhost:8085/"
+web-1  | 172.18.0.1 - - [04/Nov/2026:04:55:29 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://localhost:8085/" "Mozil
+la/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+web-1  | 172.18.0.3 - - [04/Nov/2026:04:56:52 +0000] "GET / HTTP/1.1" 200 243 "-" "Wget" "-"
+web-1  | 172.18.0.1 - - [04/Nov/2026:04:57:20 +0000] "GET / HTTP/1.1" 200 243 "-" "curl/8.21.0" "-"
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus logs --tail 30 checker
+
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus down
+[+] down 3/3
+ ✔ Container codyssey-bonus-checker-1 Removed                                                                       3.2s
+ ✔ Container codyssey-bonus-web-1     Removed                                                                       0.3s
+ ✔ Network codyssey-bonus_default     Removed                                                                       0.2s
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus ps -a
+NAME      IMAGE     COMMAND   SERVICE   CREATED   STATUS    PORTS
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus up -d
+[+] up 3/3
+ ✔ Network codyssey-bonus_default     Created                                                                       0.0s
+ ✔ Container codyssey-bonus-web-1     Started                                                                       0.3s
+ ✔ Container codyssey-bonus-checker-1 Started                                                                       0.4s
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus ps
+NAME                       IMAGE                COMMAND                   SERVICE   CREATED         STATUS         PORTS
+codyssey-bonus-checker-1   alpine:latest        "sleep infinity"          checker   4 seconds ago   Up 3 seconds
+codyssey-bonus-web-1       codyssey-bonus-web   "/docker-entrypoint.…"   web       4 seconds ago   Up 4 seconds   127.0
+.0.1:8085->80/tcp
+PS C:\Users\user\codyssey-web\Codyssey> docker compose -p codyssey-bonus exec checker wget -qO- http://web:80
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 변경 반영 성공!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+PS C:\Users\user\codyssey-web\Codyssey> Stop-Transcript
+**********************
+Windows PowerShell 기록 끝
+종료 시간: 20261104135801
+**********************

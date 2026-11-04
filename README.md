@@ -598,11 +598,131 @@ docker volume rm codyssey-repro-data
 
 ## 선택 과제
 
-- [ ] Compose 단일 서비스
-- [ ] Compose 멀티 서비스·컨테이너 간 통신
-- [ ] Compose up·down·ps·logs
-- [ ] 환경 변수로 설정 변경
-- [ ] GitHub SSH 키 설정
+- [x] Compose 단일 서비스
+- [x] Compose 멀티 서비스·컨테이너 간 통신
+- [x] Compose up·down·ps·logs
+- [x] 환경 변수로 실제 NGINX 수신 포트 변경
+- [x] GitHub 인증용 SSH 공개키 등록 및 서버의 키 수락 확인
+- [ ] SSH 인증·푸시 성공 출력 추가 및 보너스 변경분 원격 반영
+
+### 선택 1. Compose 단일 서비스
+
+[단일 서비스 설정](./docker-compose.single.yml)은 services 아래 web 서비스를 정의하고 build로 기존 Dockerfile을 사용하며 127.0.0.1:8085를 컨테이너 80에 연결한다. 긴 docker run 옵션을 설정 파일로 보관해 실행 조건을 공유할 수 있다.
+
+최초 단일 서비스 실습에서는 docker-compose.yml에 이 설정을 작성했다. 현재 기본 파일은 멀티 서비스로 확장했으므로 단일 서비스는 보관한 파일을 명시해 재현한다.
+
+```powershell
+docker compose -p codyssey-single -f docker-compose.single.yml up -d --build
+docker compose -p codyssey-single -f docker-compose.single.yml ps
+curl.exe http://localhost:8085
+docker compose -p codyssey-single -f docker-compose.single.yml down
+```
+
+현재 멀티 서비스도 8085를 쓰므로 위 재현 전 `docker compose -p codyssey-bonus down`으로 해당 프로젝트를 종료하거나, 파일의 호스트 포트를 변경한다.
+
+[최초 단일 서비스 명령·출력](./logs/compose-single.txt)
+
+![Compose 웹 서버 8085 접속](./screenshots/compose-web-8085.png)
+
+### 선택 2. 멀티 컨테이너와 서비스 이름 통신
+
+[docker-compose.yml](./docker-compose.yml)에 웹 서버 web과 Alpine 기반 보조 서비스 checker를 함께 정의했다. checker의 주 프로세스는 sleep infinity다.
+
+```powershell
+docker compose -p codyssey-bonus up -d --build
+docker compose -p codyssey-bonus ps
+docker compose -p codyssey-bonus exec checker wget -qO- http://web:80
+```
+
+두 서비스가 Up 상태이며 checker에서 웹 페이지 HTML을 받았다. 같은 Compose 네트워크에서는 서비스 이름 web을 DNS 이름으로 사용한다. 컨테이너 간 통신은 호스트 8085가 아닌 컨테이너 포트 80으로 이루어진다. [명령·실행 상태·응답 로그](./logs/compose-multi.txt)
+
+### 선택 3. Compose 운영
+
+```powershell
+docker compose -p codyssey-bonus ps
+curl.exe http://localhost:8085
+docker compose -p codyssey-bonus logs --tail 30 web
+docker compose -p codyssey-bonus logs --tail 30 checker
+docker compose -p codyssey-bonus down
+docker compose -p codyssey-bonus ps -a
+docker compose -p codyssey-bonus up -d
+docker compose -p codyssey-bonus ps
+docker compose -p codyssey-bonus exec checker wget -qO- http://web:80
+```
+
+web 로그에서 HTTP 200 요청을 확인했다. checker는 주 프로세스가 출력하지 않으므로 logs가 비어 있었다. down 후 서비스 행이 없어졌고, up 후 두 서비스가 다시 실행되어 통신에 성공했다. 운영 루틴은 상태 확인 → 요청·로그 확인 → 종료 → 같은 설정으로 재실행이다. [실제 운영 전체 로그](./logs/compose-operations.txt)
+
+### 선택 4. 환경 변수로 서버 포트 변경
+
+[별도 Compose 설정](./docker-compose.env.yml)에서 NGINX_PORT를 주입하고, [NGINX 템플릿](./nginx/default.conf.template)의 listen에 해당 값을 반영했다. 공식 NGINX 이미지의 시작 스크립트가 템플릿을 실제 설정 파일로 변환한다.
+
+```powershell
+$env:NGINX_PORT = "8088"
+docker compose -p codyssey-env -f docker-compose.env.yml up -d --build
+docker compose -p codyssey-env -f docker-compose.env.yml exec web cat /etc/nginx/conf.d/default.conf
+curl.exe http://localhost:8086
+$env:NGINX_PORT = "9090"
+docker compose -p codyssey-env -f docker-compose.env.yml up -d
+docker compose -p codyssey-env -f docker-compose.env.yml exec web cat /etc/nginx/conf.d/default.conf
+curl.exe http://localhost:8086
+```
+
+| 항목 | 변경 전 | 변경 후 |
+|---|---|---|
+| NGINX_PORT | 8088 | 9090 |
+| 실제 설정 | listen 8088; | listen 9090; |
+| 호스트 접속 | localhost:8086 | localhost:8086 |
+| 결과 | HTML 응답 | HTML 응답 |
+
+Dockerfile·HTML 수정 없이 환경 변수로 서버 수신 포트를 바꿨다. 실습 종료 명령은 아래와 같다.
+
+```powershell
+docker compose -p codyssey-env -f docker-compose.env.yml down
+Remove-Item Env:NGINX_PORT
+```
+
+[포트 변경 전후 원본 로그](./logs/compose-environment.txt)
+
+down 직후 브라우저 접속이 되지 않은 것은 서버를 종료했기 때문이다. 후속 확인에서 9090 설정으로 다시 실행한 뒤 localhost:8086 응답을 확인했다. [재실행·응답 로그](./logs/compose-environment-restart.txt)
+
+### 선택 5. GitHub SSH 설정
+
+별도 Ed25519 키를 생성하고 저장소에 사용할 키 경로와 SSH 원격 주소를 설정했다. 개인키는 저장소에 포함하지 않는다.
+
+```powershell
+git config --local core.sshCommand "ssh -i C:/Users/user/.ssh/id_ed25519_codyssey -o IdentitiesOnly=yes"
+git remote set-url origin git@github.com:20222002-ch/Codyssey.git
+git remote -v
+git push origin main
+```
+
+하지만 [실제 SSH 푸시 로그](./logs/github-ssh.txt)에는 아래 오류가 남았다.
+
+```text
+git@github.com: Permission denied (publickey).
+fatal: Could not read from remote repository.
+```
+
+초기에는 공개키가 인증용 키 목록에 없었으나 이후 올바른 OpenSSH 공개키를 다시 복사해 GitHub에 등록했다. 현재 계정의 인증용 공개키와 로컬 공개키가 일치하고, SSH 디버그 출력에서도 `Server accepts key`를 확인했다.
+
+등록한 공개키의 지문은 `SHA256:rEwugJZVSivG9c6SqaWPp2bQcRok9cRwBB1xydfIbd8`이다. 공개키 원문·개인키·키 암호는 문서에 넣지 않았다.
+
+키 암호를 입력할 수 없는 자동 실행 환경에서는 BatchMode 인증이 실패했고 SSH agent도 연결되지 않았다. 따라서 이를 키 등록 실패와 구분한다. 사용자는 대화형 PowerShell에서 인증·푸시를 마쳤다고 확인했으나, 새 성공 출력이 원본 로그에 남아 있지 않아 성공 증거와 보너스 변경분의 최종 SSH 푸시는 추가 확인 항목으로 남겼다. [키 등록·서버 수락 확인](./logs/ssh-registration-check.txt)
+
+최종 커밋을 SSH로 반영하고 기록하는 명령은 다음과 같다. 키 암호를 물으면 사용자 터미널에서 입력하며 로그에 암호를 직접 적지 않는다.
+
+```powershell
+Start-Transcript -Path .\logs\github-ssh-success.txt -Append
+ssh -T -o ConnectTimeout=10 -i "$env:USERPROFILE\.ssh\id_ed25519_codyssey" -o IdentitiesOnly=yes git@github.com
+git push origin main
+Stop-Transcript
+```
+
+SSH 테스트는 본인 계정과 successfully authenticated 메시지가 표시되는지 확인한다. GitHub는 셸 접속을 제공하지 않아 이 테스트의 종료 코드 1은 정상일 수 있다. 이후 git push의 성공은 별도로 확인해야 한다.
+
+또한 SSH 주소를 명령으로 단독 입력해 PowerShell CommandNotFoundException이 발생했다. 주소는 git remote set-url의 인자이며 실행 명령과 구분한다.
+
+PowerShell 원본 보너스 로그 일부에는 터미널의 NUL 제어 문자가 포함되어 있다. 원본을 보존했으며 README에는 읽을 수 있는 명령·결과를 요약했다.
 
 ## 제출 전 남은 확인
 
@@ -614,4 +734,4 @@ docker volume rm codyssey-repro-data
 - [x] 첨부 이미지 확인 및 로그의 토큰·비밀번호·개인키·인증 코드 점검
 - [x] 파일 커밋·푸시 및 상대 경로 링크 대상 파일의 원격 트리 포함 확인
 
-필수 실습 증거와 기술 문서를 저장소에 반영했다. 선택 과제는 수행하지 않았으며 필수 항목과 구분한다.
+필수 실습 증거와 기술 문서는 기존 커밋으로 원격에 반영했다. 선택 과제 1~4번 및 SSH 공개키 등록까지 확인했고, SSH 성공 출력 보관과 보너스 변경분의 최종 원격 반영을 남겨두었다.
