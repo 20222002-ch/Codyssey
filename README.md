@@ -313,6 +313,71 @@ PS> curl.exe --fail --silent --show-error http://localhost:8081
 
 ![8081 포트의 바인드 마운트 변경 반영](./screenshots/web-8081-after.png)
 
+### 4-1. 평가 항목 #16: 포트 충돌 진단과 해제
+
+최초 제출에는 포트 매핑 성공 증거만 있고 점유 프로세스 조회·해제의 구체적인 실행 로그가 없었다. 동료평가 피드백에 따라 기존 웹 서버와 분리한 18085 포트에서 충돌을 실제로 재현하고 보완했다.
+
+**문제 재현:** codyssey-port-holder를 127.0.0.1:18085에 연결한 뒤 같은 주소·포트로 codyssey-port-collision을 실행했다.
+
+```powershell
+docker run -d --name codyssey-port-holder -p 127.0.0.1:18085:80 codyssey-web:1.0
+docker run -d --name codyssey-port-collision -p 127.0.0.1:18085:80 codyssey-web:1.0
+```
+
+```text
+Bind for 127.0.0.1:18085 failed: port is already allocated
+ExitCode=125
+```
+
+**포트 사용 PID와 프로세스 확인:** Windows PowerShell에서 다음 명령으로 조사했다.
+
+```powershell
+netstat -ano -p tcp | Select-String ":18085\s"
+Get-NetTCPConnection -LocalPort 18085 -State Listen | Select-Object LocalAddress,LocalPort,State,OwningProcess
+Get-NetTCPConnection -LocalPort 18085 -State Listen | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Get-Process -Id $_ | Select-Object Id,ProcessName }
+docker ps --filter publish=18085 --format "table {{.Names}}\t{{.Ports}}"
+```
+
+실제 출력 발췌:
+
+```text
+TCP    127.0.0.1:18085    0.0.0.0:0    LISTENING    26500
+
+   Id ProcessName
+   -- -----------
+26500 com.docker.backend
+
+NAMES                  PORTS
+codyssey-port-holder   127.0.0.1:18085->80/tcp
+```
+
+PID 26500은 이번 실행 시점의 값이며 재실행하면 달라질 수 있다. 호스트에서 포트를 전달하는 Docker 프로세스가 확인됐으므로 Docker 엔진 전체를 강제 종료하지 않고, 실제 점유 컨테이너만 중지해 포트를 해제했다.
+
+**포트 해제 명령과 재조회:**
+
+```text
+PS> docker stop codyssey-port-holder
+codyssey-port-holder
+ExitCode=0
+
+PS> netstat -ano -p tcp | Select-String ":18085\s"
+(출력 없음)
+ExitCode=0
+```
+
+Get-NetTCPConnection으로도 같은 포트의 LISTEN 항목이 사라졌는지 확인했다. 실패했던 컨테이너를 삭제하고 포트 옵션을 명시해 다시 생성했다.
+
+```powershell
+docker rm codyssey-port-collision
+docker run -d --name codyssey-port-collision -p 127.0.0.1:18085:80 codyssey-web:1.0
+docker ps --filter name=codyssey-port-collision --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+curl.exe --fail --silent --show-error http://localhost:18085
+```
+
+포트 매핑이 127.0.0.1:18085->80/tcp로 표시됐고, curl은 HTML의 `<h1>나의 첫 Docker 웹 서버</h1>`을 출력하며 ExitCode=0으로 성공했다. 완료 후 이번에 만든 두 실습 컨테이너만 삭제했다. 기존 8080·8081·8085·8086 서비스는 유지했다.
+
+[충돌 오류 → PID·프로세스 확인 → 포트 해제 → 재조회 → 동일 포트 재사용의 실제 전체 로그](./logs/port-conflict.txt)
+
 ## 5. 바인드 마운트와 볼륨
 
 ### 5-1. 바인드 마운트
@@ -486,6 +551,14 @@ open //./pipe/docker_engine: The system cannot find the file specified.
 - **해결/대안:** 운영 명령은 호스트 PowerShell에서 실행한다. attach에서 연결만 끊을 때는 Ctrl+P, Ctrl+Q 후 PowerShell 프롬프트인지 확인한다.
 - **재확인:** 호스트에서 ps·logs·stats 실행에 성공했다. 후속 대화형 검증에서도 연결 해제 후 Up과 재접속 후 exit 시 Exited (0)을 확인했다. [최초 컨테이너 로그](./logs/docker-operations.txt), [후속 attach 비교 로그](./logs/attach-verification.txt)
 
+### 7-4. 동일 호스트 포트 충돌
+
+- **문제:** 같은 127.0.0.1:18085로 두 컨테이너를 실행하자 port is already allocated 오류가 발생했다.
+- **원인 가설:** 먼저 실행한 컨테이너가 호스트 포트를 점유하고 있을 것으로 예상했다.
+- **확인:** netstat에서 LISTENING 및 PID 26500, Get-Process에서 com.docker.backend를 확인했다. docker ps의 publish 필터로 codyssey-port-holder에 연결된 포트임을 확인했다.
+- **해결:** docker stop codyssey-port-holder로 해당 포트를 해제했다. 재조회에서 LISTEN 항목이 없음을 확인하고 실패 컨테이너를 새로 생성했다.
+- **재확인:** 같은 18085에 포트 매핑을 설정한 컨테이너가 실행되고 curl로 HTML을 받아 ExitCode=0을 확인했다. [실제 명령·출력](./logs/port-conflict.txt)
+
 ## 8. 다른 컴퓨터에서 다시 실행하기
 
 아래는 재현용 명령이다. Docker Desktop을 실행하고 Linux 엔진이 준비된 **PowerShell**에서 진행한다. 기존 실습과 구분하려고 새 이름 및 8082·8083 포트를 사용한다. 해당 포트도 사용 중이면 번호를 바꾼다.
@@ -585,6 +658,7 @@ docker volume rm codyssey-repro-data
 | [Docker 운영](./logs/docker-operations.txt) | 이미지·컨테이너·로그·리소스 |
 | [빌드 검증](./logs/build-verification.txt) | 현재 소스의 별도 태그 빌드 |
 | [웹·마운트](./logs/web-and-mount.txt) | 포트·마운트·HTTP 응답 |
+| [포트 충돌 진단·해제](./logs/port-conflict.txt) | 평가 #16: 충돌·netstat·PID·프로세스·해제·동일 포트 재사용 |
 | [볼륨](./logs/volume-verification.txt) | 기존 데이터를 새 컨테이너에서 조회 |
 | [Git](./logs/git-settings.txt) | 마스킹한 설정·원격 연결 |
 | [8080 접속 화면](./screenshots/web-8080.png) | 주소창·포트 및 원래 웹 콘텐츠 |
@@ -738,6 +812,7 @@ PowerShell 보너스 로그 일부의 NUL 제어 문자와 줄 끝 공백은 가
 
 ## 제출 전 남은 확인
 
+- [x] 평가 #16: 포트 점유 PID·프로세스 조회 및 포트 해제·재사용 실행 로그 추가
 - [x] 8080·8081 브라우저 접속 화면에 주소창·포트가 보이도록 캡처하고 연결
 - [x] 같은 포트의 바인드 마운트 변경 전후 응답 및 볼륨 삭제 전후 연속 로그 확보
 - [x] attach 연결 해제 직후 Up 및 exit 후 종료 상태 비교 로그 확보

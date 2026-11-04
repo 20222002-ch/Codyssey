@@ -1,0 +1,78 @@
+2026-11-04 (Asia/Seoul): 평가 항목 #16 보완. 별도 포트 18085에서 실제 충돌, PID 확인, 포트 해제 및 재사용을 검증.
+PS> docker run -d --name codyssey-port-holder -p 127.0.0.1:18085:80 codyssey-web:1.0
+1ef0676c318f2b1ecf2c06b3008ef9e31b831c6d2c47a1314b681e0abd706568
+ExitCode=0
+
+PS> docker run -d --name codyssey-port-collision -p 127.0.0.1:18085:80 codyssey-web:1.0
+e76518142743342fa34287edff25a303a35324e5270599c2333a4ecd508d7552
+docker: Error response from daemon: failed to set up container networking: driver failed programming external connectivity on endpoint codyssey-port-collision (53048ca062eeb3ba5958fb5ca8464ce9444183fe691f921dc7e39946932c0bc9): Bind for 127.0.0.1:18085 failed: port is already allocated
+
+Run 'docker run --help' for more information
+ExitCode=125
+
+PS> netstat -ano -p tcp | Select-String ":18085\s"
+
+  TCP    127.0.0.1:18085        0.0.0.0:0              LISTENING       26500
+ExitCode=0
+
+PS> Get-NetTCPConnection -LocalPort 18085 -State Listen | Select-Object LocalAddress,LocalPort,State,OwningProcess
+
+LocalAddress LocalPort  State OwningProcess
+------------ ---------  ----- -------------
+127.0.0.1        18085 Listen         26500
+ExitCode=0
+
+PS> Get-NetTCPConnection -LocalPort 18085 -State Listen | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { Get-Process -Id $_ | Select-Object Id,ProcessName }
+
+   Id ProcessName
+   -- -----------
+26500 com.docker.backend
+ExitCode=0
+
+PS> docker ps --filter publish=18085 --format "table {{.Names}}\t{{.Ports}}"
+NAMES                  PORTS
+codyssey-port-holder   127.0.0.1:18085->80/tcp
+ExitCode=0
+
+해석: 호스트 PID는 Docker 포트 전달 프로세스다. Docker 엔진 전체를 종료하지 않고 이 포트를 점유한 실습 컨테이너만 중지해 포트를 해제한다.
+PS> docker stop codyssey-port-holder
+codyssey-port-holder
+ExitCode=0
+
+PS> netstat -ano -p tcp | Select-String ":18085\s"
+(출력 없음)
+ExitCode=0
+
+확인: 18085의 LISTEN 항목이 사라짐.
+PS> docker rm codyssey-port-collision
+codyssey-port-collision
+ExitCode=0
+
+PS> docker run -d --name codyssey-port-collision -p 127.0.0.1:18085:80 codyssey-web:1.0
+d48c282989252cb024c0f7094ab50fa49e6763ee9547beb98b860e500496125a
+ExitCode=0
+
+PS> docker ps --filter name=codyssey-port-collision --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+NAMES                     STATUS        PORTS
+codyssey-port-collision   Up 1 second   127.0.0.1:18085->80/tcp
+ExitCode=0
+
+PS> curl.exe --fail --silent --show-error http://localhost:18085
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>나의 첫 Docker 웹 서버</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+ExitCode=0
+
+결과: 기존 점유 컨테이너 중지 후, 충돌했던 컨테이너를 동일 포트로 실행하고 HTTP 응답 성공.
+PS> docker rm -f codyssey-port-holder codyssey-port-collision
+codyssey-port-holder
+codyssey-port-collision
+ExitCode=0
