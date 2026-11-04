@@ -1,0 +1,47 @@
+수집일: 2026-11-04 (Asia/Seoul). README 작성 시 실제 환경을 재확인한 로그이며 최초 실습 전체 기록은 아님.
+
+PS> docker inspect codyssey-web-8080 codyssey-web-bind --format '{{.Name}}: Ports={{json .HostConfig.PortBindings}}; Mounts={{json .Mounts}}'
+/codyssey-web-8080: Ports={"80/tcp":[{"HostIp":"","HostPort":"8080"}]}; Mounts=[]
+/codyssey-web-bind: Ports={"80/tcp":[{"HostIp":"","HostPort":"8081"}]}; Mounts=[{"Type":"bind","Source":"C:\\Users\\user\\codyssey-web\\site","Destination":"/usr/share/nginx/html","Mode":"","RW":false,"Propagation":"rprivate"}]
+
+PS> Get-Content -Encoding utf8 .\site\index.html
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 변경 반영 성공!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+
+PS> curl.exe --fail --silent --show-error http://localhost:8080
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>나의 첫 Docker 웹 서버</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+
+PS> curl.exe --fail --silent --show-error http://localhost:8081
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 변경 반영 성공!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+
+PS> docker image inspect codyssey-web:1.0 --format 'ID={{.Id}}; Labels={{json .Config.Labels}}; ExposedPorts={{json .Config.ExposedPorts}}'
+ID=sha256:189fd2ea22a1c837b0489ad4bb66b09559cf4e47b6b9c38de0cff59797b00f5c; Labels={"maintainer":"NGINX Docker Maintainers <docker-maint@nginx.com>","org.opencontainers.image.title":"codyssey-web"}; ExposedPorts={"80/tcp":{}}

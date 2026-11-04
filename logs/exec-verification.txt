@@ -1,0 +1,16 @@
+2026-11-04 (Asia/Seoul): exec로 만든 Bash가 종료되어도 주 프로세스가 유지되는지 재검증.
+PS> docker run -d --name codyssey-final-exec ubuntu sleep infinity
+b70d99b8fcdd97203a00bd741bd75f3c429ee6aa8ce84e00b7355f06819427f7
+
+PS> docker exec codyssey-final-exec bash -c "echo 'Connected using docker exec'; exit 0"
+Connected using docker exec
+
+PS> docker inspect codyssey-final-exec --format "Running={{.State.Running}}; MainProcess={{json .Config.Cmd}}"
+Running=true; MainProcess=["sleep","infinity"]
+
+PS> docker ps --filter name=codyssey-final-exec
+CONTAINER ID   IMAGE     COMMAND            CREATED                  STATUS                  PORTS     NAMES
+b70d99b8fcdd   ubuntu    "sleep infinity"   Less than a second ago   Up Less than a second             codyssey-final-exec
+
+PS> docker rm -f codyssey-final-exec
+codyssey-final-exec

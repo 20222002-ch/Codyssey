@@ -1,0 +1,23 @@
+수집일: 2026-11-04 (Asia/Seoul). README 작성 시 실제 환경을 재확인한 로그이며 최초 실습 전체 기록은 아님.
+
+PS> docker volume inspect codyssey-data
+[
+    {
+        "CreatedAt": "2026-11-04T02:57:45Z",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/codyssey-data/_data",
+        "Name": "codyssey-data",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+
+PS> docker inspect volume-after --format 'Name={{.Name}}; Mounts={{json .Mounts}}; Running={{.State.Running}}'
+Name=/volume-after; Mounts=[{"Type":"volume","Name":"codyssey-data","Source":"/var/lib/docker/volumes/codyssey-data/_data","Destination":"/data","Driver":"local","Mode":"z","RW":true,"Propagation":""}]; Running=false
+
+PS> docker ps -a --filter name=volume-before
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+PS> docker run --rm --mount type=volume,source=codyssey-data,target=/data,readonly ubuntu cat /data/hello.txt
+Codyssey volume persistence test

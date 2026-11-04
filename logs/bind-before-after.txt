@@ -1,0 +1,42 @@
+2026-11-04 (Asia/Seoul): 동일 포트에서 호스트 파일 변경 전후 재검증. 기존 실습 소스는 수정하지 않고 별도 사본 사용.
+PS> Copy-Item -LiteralPath 'C:\Users\user\codyssey-web\Codyssey\site\index.html' -Destination 'C:\Users\user\Documents\Codex\2026-11-04\new-chat\work\final-site\index.html'
+
+
+PS> docker run -d --name codyssey-final-bind -p 127.0.0.1:8084:80 --mount 'type=bind,source=C:\Users\user\Documents\Codex\2026-11-04\new-chat\work\final-site,target=/usr/share/nginx/html,readonly' codyssey-web:1.0
+56fed0936bf230c21a4478b3af327a31cc82c6952ccd6be7b8764f57a6da5f4b
+
+PS> curl.exe --fail --silent --show-error http://localhost:8084
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 변경 반영 성공!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+
+PS> (Get-Content -Raw -Encoding utf8 'C:\Users\user\Documents\Codex\2026-11-04\new-chat\work\final-site\index.html').Replace('바인드 마운트 변경 반영 성공!', '바인드 마운트 재검증 완료!') | Set-Content -Encoding utf8 'C:\Users\user\Documents\Codex\2026-11-04\new-chat\work\final-site\index.html'
+
+
+PS> curl.exe --fail --silent --show-error http://localhost:8084
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>Codyssey Mission 01</title>
+</head>
+<body>
+  <h1>바인드 마운트 재검증 완료!</h1>
+  <p>NGINX 기반 커스텀 이미지 실행 성공!</p>
+</body>
+</html>
+
+PS> docker inspect codyssey-final-bind --format 'StartedAt={{.State.StartedAt}}; Mounts={{json .Mounts}}'
+StartedAt=2026-11-04T03:23:13.833538998Z; Mounts=[{"Type":"bind","Source":"C:\\Users\\user\\Documents\\Codex\\2026-11-04\\new-chat\\work\\final-site","Destination":"/usr/share/nginx/html","Mode":"","RW":false,"Propagation":"rprivate"}]
+
+검증: 같은 8084 주소에서 재빌드·재시작 없이 제목 변경 반영 성공.
+PS> docker rm -f codyssey-final-bind
+codyssey-final-bind

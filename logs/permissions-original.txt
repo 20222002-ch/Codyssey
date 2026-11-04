@@ -1,0 +1,30 @@
+Script started on 2026-11-04 11:41:24+09:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="120" LINES="30"]
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ touch note.txt
+[?2004l
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ mi[K[Kmkdir test-dir
+[?2004l
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ ls -d[Kd[Kld [K note.txt teset-di[K[K[K[K[K[Kst-dir
+[?2004l
+-rw-r--r-- 1 chungho chungho    0 Nov  4 11:41 note.txt
+drwxr-xr-x 2 chungho chungho 4096 Nov  4 11:41 [0m[01;34mtest-dir[0m
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ chmod 644 note-[K.x[Ktxt
+[?2004l
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ chmod 755 tse[K[K[Ktest-dir
+[?2004l
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ ls -d[Kld m[Knote.txt test-dir
+[?2004l
+-rw-r--r-- 1 chungho chungho    0 Nov  4 11:41 note.txt
+drwxr-xr-x 2 chungho chungho 4096 Nov  4 11:41 [0m[01;34mtest-dir[0m
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ chomod[K[K[K[Kmd [K[Kod 600 note.txt
+[?2004l
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ chmod 700 test=[K-dir
+[?2004l
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ ls- [K[K -dl[K[Kld note.txt test [Kpdi[K[K[K-dir
+[?2004l
+-rw------- 1 chungho chungho    0 Nov  4 11:41 note.txt
+drwx------ 2 chungho chungho 4096 Nov  4 11:41 [0m[01;34mtest-dir[0m
+[?2004h]0;chungho@DESKTOP-LCCS8QI: ~/codyssey-practice/permissions[01;32mchungho@DESKTOP-LCCS8QI[00m:[01;34m~/codyssey-practice/permissions[00m$ exit
+[?2004l
+exit
+
+Script done on 2026-11-04 11:42:52+09:00 [COMMAND_EXIT_CODE="0"]

@@ -1,0 +1,157 @@
+수집일: 2026-11-04 (Asia/Seoul). README 작성 시 실제 환경을 재확인한 로그이며 최초 실습 전체 기록은 아님.
+
+PS> docker images
+IMAGE                ID             DISK USAGE   CONTENT SIZE   EXTRA
+codyssey-web:1.0     189fd2ea22a1       93.6MB         26.3MB   U
+hello-world:latest   c567b231f656       25.9kB         9.49kB   U
+ubuntu:latest        6a06111c3b0a        163MB         45.9MB   U
+
+PS> docker ps
+CONTAINER ID   IMAGE              COMMAND                  CREATED          STATUS          PORTS                                     NAMES
+6c19dc00088f   codyssey-web:1.0   "/docker-entrypoint.…"   16 minutes ago   Up 16 minutes   0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   codyssey-web-bind
+a12619a7697d   codyssey-web:1.0   "/docker-entrypoint.…"   18 minutes ago   Up 18 minutes   0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   codyssey-web-8080
+
+PS> docker ps -a
+CONTAINER ID   IMAGE              COMMAND                  CREATED          STATUS                        PORTS                                     NAMES
+bde0fb92b688   ubuntu             "sleep infinity"         12 minutes ago   Exited (137) 11 minutes ago                                             volume-after
+6c19dc00088f   codyssey-web:1.0   "/docker-entrypoint.…"   16 minutes ago   Up 16 minutes                 0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   codyssey-web-bind
+a12619a7697d   codyssey-web:1.0   "/docker-entrypoint.…"   18 minutes ago   Up 18 minutes                 0.0.0.0:8080->80/tcp, [::]:8080->80/tcp   codyssey-web-8080
+149363888dfc   ubuntu             "sleep infinity"         27 minutes ago   Exited (137) 20 minutes ago                                             ubuntu-running
+9c2fabf58c75   ubuntu             "bash"                   28 minutes ago   Exited (137) 20 minutes ago                                             ubuntu-practice
+4030aa351c95   hello-world        "/hello"                 33 minutes ago   Exited (0) 33 minutes ago                                               quizzical_yalow
+
+PS> docker logs quizzical_yalow
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+
+PS> docker logs ubuntu-practice
+root@9c2fabf58c75:/# pwd
+
+/
+root@9c2fabf58c75:/# ls -la
+
+total 60
+drwxr-xr-x   1 root root 4096 Nov  4 02:43 .
+drwxr-xr-x   1 root root 4096 Nov  4 02:43 ..
+-rwxr-xr-x   1 root root    0 Nov  4 02:43 .dockerenv
+drwxr-xr-x   2 root root 4096 Oct 25 10:26 .rock
+lrwxrwxrwx   1 root root    7 Apr 20  2026 bin -> usr/bin
+drwxr-xr-x   2 root root 4096 Apr 20  2026 boot
+drwxr-xr-x   5 root root  360 Nov  4 02:43 dev
+drwxr-xr-x   1 root root 4096 Nov  4 02:43 etc
+drwxr-xr-x   3 root root 4096 Oct 25 10:26 home
+lrwxrwxrwx   1 root root    7 Apr 20  2026 lib -> usr/lib
+lrwxrwxrwx   1 root root    9 Apr 20  2026 lib64 -> usr/lib64
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 media
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 mnt
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 opt
+dr-xr-xr-x 248 root root    0 Nov  4 02:43 proc
+drwx------   2 root root 4096 Oct 25 10:26 root
+drwxr-xr-x   4 root root 4096 Oct 25 10:26 run
+lrwxrwxrwx   1 root root    8 Apr 20  2026 sbin -> usr/sbin
+drwxr-xr-x   2 root root 4096 Oct 25 10:25 srv
+dr-xr-xr-x  12 root root    0 Nov  4 02:43 sys
+drwxrwxrwt   2 root root 4096 Oct 25 10:25 tmp
+drwxr-xr-x  12 root root 4096 Oct 25 10:24 usr
+drwxr-xr-x  11 root root 4096 Oct 25 10:26 var
+root@9c2fabf58c75:/# echo "Helo lo world     from Ubuntu container"
+
+Hello from Ubuntu container
+root@9c2fabf58c75:/# cat /ect/   ct  tc/os-release
+
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+VERSION="26.04.1 LTS (Resolute Raccoon)"
+VERSION_CODENAME=resolute
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=resolute
+LOGO=ubuntu-logo
+root@9c2fabf58c75:/# ecit   xit
+
+exit
+root@9c2fabf58c75:/#
+
+root@9c2fabf58c75:/#
+
+root@9c2fabf58c75:/# eho   c eho  cho "aat  ttach practice"
+
+attach practice
+root@9c2fabf58c75:/# docker ps
+
+bash: docker: command not found
+root@9c2fabf58c75:/# dck   docker image es
+
+bash: docker: command not found
+root@9c2fabf58c75:/# ^Vdocker ps a -a ==filete   ter "nema   ame== uu buntu-par  racticd e"
+
+bash: docker: command not found
+root@9c2fabf58c75:/# docker ps -a
+
+bash: docker: command not found
+root@9c2fabf58c75:/#
+
+root@9c2fabf58c75:/#
+
+root@9c2fabf58c75:/# echo ' "attach practice"
+
+attach practice
+root@9c2fabf58c75:/# docker ps         
+
+PS> docker logs ubuntu-running
+
+
+PS> docker stats --no-stream
+CONTAINER ID   NAME                CPU %     MEM USAGE / LIMIT     MEM %     NET I/O           BLOCK I/O     PIDS
+6c19dc00088f   codyssey-web-bind   0.00%     12.91MiB / 7.611GiB   0.17%     7.63kB / 7.06kB   0B / 12.3kB   17
+a12619a7697d   codyssey-web-8080   0.00%     13.14MiB / 7.611GiB   0.17%     11.5kB / 8.59kB   0B / 12.3kB   17
+
+PS> docker logs --tail 20 codyssey-web-8080
+172.17.0.1 - - [04/Nov/2026:02:54:42 +0000] "GET / HTTP/1.1" 200 234 "-" "curl/8.21.0" "-"
+172.17.0.1 - - [04/Nov/2026:02:54:48 +0000] "GET / HTTP/1.1" 200 234 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+172.17.0.1 - - [04/Nov/2026:02:54:49 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+172.17.0.1 - - [04/Nov/2026:02:55:14 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+172.17.0.1 - - [04/Nov/2026:02:55:25 +0000] "GET / HTTP/1.1" 200 234 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+172.17.0.1 - - [04/Nov/2026:02:55:25 +0000] "GET /favicon.ico HTTP/1.1" 404 555 "http://localhost:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+172.17.0.1 - - [04/Nov/2026:02:56:20 +0000] "GET / HTTP/1.1" 200 234 "-" "curl/8.21.0" "-"
+172.17.0.1 - - [04/Nov/2026:02:56:32 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+172.17.0.1 - - [04/Nov/2026:02:56:36 +0000] "GET / HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36" "-"
+172.17.0.1 - - [04/Nov/2026:03:11:57 +0000] "GET / HTTP/1.1" 200 234 "-" "curl/8.21.0" "-"
+2026/11/04 02:54:19 [notice] 1#1: start worker process 38
+2026/11/04 02:54:19 [notice] 1#1: start worker process 39
+2026/11/04 02:54:19 [notice] 1#1: start worker process 40
+2026/11/04 02:54:19 [notice] 1#1: start worker process 41
+2026/11/04 02:54:19 [notice] 1#1: start worker process 42
+2026/11/04 02:54:19 [notice] 1#1: start worker process 43
+2026/11/04 02:54:19 [notice] 1#1: start worker process 44
+2026/11/04 02:54:19 [notice] 1#1: start worker process 45
+2026/11/04 02:54:49 [error] 41#41: *2 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080", referrer: "http://localhost:8080/"
+2026/11/04 02:55:25 [error] 40#40: *3 open() "/usr/share/nginx/html/favicon.ico" failed (2: No such file or directory), client: 172.17.0.1, server: localhost, request: "GET /favicon.ico HTTP/1.1", host: "localhost:8080", referrer: "http://localhost:8080/"
+
+PS> docker inspect ubuntu-practice ubuntu-running --format '{{.Name}}: Command={{json .Config.Cmd}}; ExitCode={{.State.ExitCode}}; Running={{.State.Running}}'
+/ubuntu-practice: Command=["bash"]; ExitCode=137; Running=false
+/ubuntu-running: Command=["sleep","infinity"]; ExitCode=137; Running=false

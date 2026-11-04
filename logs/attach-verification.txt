@@ -1,0 +1,36 @@
+2026-11-04 (Asia/Seoul): 실제 대화형 TTY에서 attach 분리와 Bash 종료를 비교한 재검증.
+터미널 색상·커서 제어 문자만 제거했다. 분리 때 read escape sequence가 출력됐지만 이후 컨테이너 Running=true를 확인했다.
+
+docker run -dit --name codyssey-final-attach ubuntu bash; docker attach codyssey-final-attach
+1c497bde911a37042e06378015ef5e1d45923796422ddd88dbf4d709473a239e
+root@1c497bde911a:/#
+
+Bash> echo 'attach verification'
+echo 'attach verification'
+attach verification
+root@1c497bde911a:/#
+
+Keys: Ctrl+P, Ctrl+Q
+read escape sequence
+
+
+PS> docker ps --filter name=codyssey-final-attach
+PS> docker inspect codyssey-final-attach --format 'Running={{.State.Running}}; ExitCode={{.State.ExitCode}}'
+PS> docker attach codyssey-final-attach
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS          PORTS     NAMES
+1c497bde911a   ubuntu    "bash"    27 seconds ago   Up 26 seconds             codyssey-final-attach
+Running=true; ExitCode=0
+root@1c497bde911a:/#
+
+Bash> exit
+exit
+exit
+
+
+PS> docker ps -a --filter name=codyssey-final-attach
+PS> docker inspect codyssey-final-attach --format 'Running={{.State.Running}}; ExitCode={{.State.ExitCode}}'
+PS> docker rm codyssey-final-attach
+CONTAINER ID   IMAGE     COMMAND   CREATED          STATUS                     PORTS     NAMES
+1c497bde911a   ubuntu    "bash"    50 seconds ago   Exited (0) 8 seconds ago             codyssey-final-attach
+Running=false; ExitCode=0
+codyssey-final-attach

@@ -1,0 +1,31 @@
+2026-11-04 (Asia/Seoul): 데이터 생성부터 컨테이너 삭제·재생성까지 연속 재검증.
+PS> docker volume create codyssey-final-data
+codyssey-final-data
+
+PS> docker run -d --name codyssey-final-before --mount type=volume,source=codyssey-final-data,target=/data ubuntu sleep infinity
+154d089a294a8e7e89dd2ef5829a67659322aedb2a93c5617fccb8a390958900
+
+PS> docker exec codyssey-final-before bash -c "echo 'Codyssey volume persistence test' > /data/hello.txt"
+
+
+PS> docker exec codyssey-final-before cat /data/hello.txt
+Codyssey volume persistence test
+
+PS> docker rm -f codyssey-final-before
+codyssey-final-before
+
+PS> docker ps -a --filter name=codyssey-final-before
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+PS> docker run -d --name codyssey-final-after --mount type=volume,source=codyssey-final-data,target=/data ubuntu sleep infinity
+06fb0714b9039b5707d597ea395816cd1b60055bf946adf1529c5e0cd487994a
+
+PS> docker exec codyssey-final-after cat /data/hello.txt
+Codyssey volume persistence test
+
+검증: 컨테이너 삭제 전후 조회 결과 일치.
+PS> docker rm -f codyssey-final-after
+codyssey-final-after
+
+PS> docker volume rm codyssey-final-data
+codyssey-final-data

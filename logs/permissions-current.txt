@@ -1,0 +1,5 @@
+수집일: 2026-11-04 (Asia/Seoul). README 작성 시 실제 환경을 재확인한 로그이며 최초 실습 전체 기록은 아님.
+
+PS> wsl -d Ubuntu -- stat -c '%a %A %n' /home/chungho/codyssey-practice/permissions/note.txt /home/chungho/codyssey-practice/permissions/test-dir
+600 -rw------- /home/chungho/codyssey-practice/permissions/note.txt
+700 drwx------ /home/chungho/codyssey-practice/permissions/test-dir
